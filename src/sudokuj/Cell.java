@@ -5,6 +5,7 @@
 package sudokuj;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -12,72 +13,44 @@ import java.util.ArrayList;
  */
 public class Cell {
 
-    private ArrayList<Integer> rowPotentialValues;
-    private ArrayList<Integer> colPotentialValues;
-    private ArrayList<Integer> boxPotentialValues;
+    private List<Integer> potentialValues;
+    
     private int value;
 
     public Cell() {
         value = 0;
-        rowPotentialValues = new ArrayList<>();
-        colPotentialValues = new ArrayList<>();
-        boxPotentialValues = new ArrayList<>();
-
+        potentialValues = new ArrayList<>();
         //System.out.println("Building a cell!");
     }
 
     public Cell(int val) {
         if (val <= 0) {
             value = 0;
-            rowPotentialValues = new ArrayList<>();
-            colPotentialValues = new ArrayList<>();
-            boxPotentialValues = new ArrayList<>();
+            potentialValues = new ArrayList<>();
         } else {
             value = val;
-            rowPotentialValues = null;
-            colPotentialValues = null;
-            boxPotentialValues = null;
+            potentialValues = null;
         }
     }
 
-    public void setRowPot(int v) {
+    public void setPot(int v) {
         // TODO: stuff
-        if (!rowPotentialValues.contains(v)) {
-            rowPotentialValues.add(v);
-        }
-    }
-
-    public void setColPot(int v) {
-        // TODO: stuff
-        if (!colPotentialValues.contains(v)) {
-            colPotentialValues.add(v);
-        }
-    }
-
-    public void setBoxPot(int v) {
-        // TODO: stuff
-        if (!boxPotentialValues.contains(v)) {
-            boxPotentialValues.add(v);
+        if (!potentialValues.contains(v)) {
+            potentialValues.add(v);
         }
     }
     
-    public int getTotalRowPots() {
-        return rowPotentialValues.size();
-    }
-
-    public int getTotalColPots() {
-        return colPotentialValues.size();
+    public int getTotalPots() {
+        return potentialValues.size();
     }
     
-    public int getTotalBoxPots() {
-        return boxPotentialValues.size();
+    public boolean isPotential(int v) {
+        return potentialValues.contains(v);
     }
     
     public void set(int v) {
         value = v;
-        rowPotentialValues = null;
-            colPotentialValues = null;
-            boxPotentialValues = null;
+        potentialValues = null;
     }
     
     public int getValue() {
