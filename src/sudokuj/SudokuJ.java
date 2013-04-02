@@ -15,12 +15,24 @@ public class SudokuJ {
      */
     public static void main(String[] args) {
         Sudoku sudo;
-        sudo = new Sudoku();
+        
+        if (args.length == 1) {
+            sudo = new Sudoku(PuzzleParser.parseProblem(args[0]));
+            if (PuzzleParser.isSolved()) {
+                System.out.println("Solved! Here is the solution:");
+                sudo.printBoard();
+                return;
+            }
+        } else {
+            sudo = new Sudoku();
+        }
         System.out.println("Solving naively");
-        if (sudo.solve()) {
+        sudo.solve();
+        if (sudo.solved()) {
+            System.out.println("Solved! Here is the solution:");
             sudo.printBoard();
         } else {
-            System.out.println("Infinite loop detected.");
+            System.out.println("Infinite loop detected. No solution.");
             sudo.printBoard();
         }
     }

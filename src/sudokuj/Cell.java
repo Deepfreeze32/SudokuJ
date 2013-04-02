@@ -40,12 +40,27 @@ public class Cell {
         }
     }
     
+    public boolean empty() {
+        return potentialValues.isEmpty();
+    }
+    
     public int getTotalPots() {
         return potentialValues.size();
     }
     
     public boolean isPotential(int v) {
         return potentialValues.contains(v);
+    }
+    
+    public void set() {
+        if (potentialValues.size() == 1) {
+            value = potentialValues.get(0);
+            potentialValues = null;
+        }
+    }
+    
+    public void remove(int v) {
+        potentialValues.remove(potentialValues.indexOf(v));
     }
     
     public void set(int v) {

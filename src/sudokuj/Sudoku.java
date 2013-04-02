@@ -6,7 +6,6 @@ package sudokuj;
 
 import java.util.ArrayList;
 import java.util.List;
-import puzzle.DefaultPuzzle;
 
 /**
  *
@@ -14,8 +13,23 @@ import puzzle.DefaultPuzzle;
  */
 public final class Sudoku {
 
+    private static final boolean phaseTwo = true;
+    
     Cell[][] board;
+    int cellsToSolve;
 
+    public void computeCellsToSolve() {
+        int cells = 0;
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 0; j++) {
+                if (board[i][j].getValue() == 0) {
+                    cells++;
+                }
+            }
+        }
+        cellsToSolve = cells;
+    }
+    
     public Sudoku() {
         DefaultPuzzle defaultPuzzle = new DefaultPuzzle();
         board = DefaultPuzzle.getBoard();
@@ -23,7 +37,9 @@ public final class Sudoku {
     }
 
     public Sudoku(Cell[][] b) {
+        //System.out.println(b.length);
         board = b;
+        printBoard();
     }
 
     public boolean conflict(int row, int col, int val) {
@@ -55,6 +71,18 @@ public final class Sudoku {
         return false;
     }
 
+    public boolean boxNeeds(int n, int row, int col) {
+        return !boxContains(row,col,n);
+    }
+    
+    public boolean rowNeeds(int n, int row, int col) {
+        return !rowContains(row,n);
+    }
+    
+    public boolean colNeeds(int n, int row, int col) {
+        return !colContains(col,n);
+    }
+    
     public boolean rowContains(int row, int val) {
         for (int k = 0; k < 9; ++k) {
             if (val == board[row][k].getValue()) {
@@ -85,165 +113,81 @@ public final class Sudoku {
         }
         return false;
     }
-    
-    public int getBoxNumber(int row, int col) {
-        int box;
-        if (row > 9 || row < 1 || col > 9 || col < 9) {
-            box = 0;
+
+    public boolean checkPhaseOne(int row, int col) {
+        boolean worked = false;
+        
+        if (board[row][col].empty()) {
+            for (int i = 1; i < 10; i++) {
+                if (!conflict(row,col,i)) {
+                    board[row][col].setPot(i);
+                    worked = true;
+                }
+            }
+        } else if (board[row][col].getTotalPots() == 1) {
+            board[row][col].set();
         } else {
-            if (col < 3 && row < 3) {
-                box = 1;
-            } else if (col < 6 && row < 3) {
-                box = 2;
-            } else if (col < 9 && row < 3) {
-                box = 3;
-            } else if (col < 3 && row < 6) {
-                box = 4;
-            } else if (col < 6 && row < 6) {
-                box = 5;
-            } else if (col < 9 && row < 3) {
-                box = 6;
-            } else if (col < 3 && row < 9) {
-                box = 7;
-            } else if (col < 6 && row < 9) {
-                box = 8;
-            } else {
-                box = 9;
+            for (int i = 1; i < 10; i++) {
+                if (conflict(row,col,i) && board[row][col].isPotential(i)) {
+                    board[row][col].remove(i);
+                    worked = true;
+                }
             }
         }
-        return box;
+        
+        return worked;
     }
     
-    public List<Integer> getBoxGroups(int box) {
-        List<Integer> l = new ArrayList<>();
-        if (box == 1) {
-            l.add(2);
-            l.add(3);
-            l.add(4);
-            l.add(7);
-        } else if (box == 2) {
-            l.add(1);
-            l.add(3);
-            l.add(5);
-            l.add(8);
-        } else if (box == 3) {
-            l.add(1);
-            l.add(2);
-            l.add(6);
-            l.add(9);
-        } else if (box == 4) {
-            l.add(1);
-            l.add(5);
-            l.add(6);
-            l.add(7);
-        } else if (box == 5) {
-            l.add(2);
-            l.add(4);
-            l.add(6);
-            l.add(8);
-        } else if (box == 7) {
-            l.add(1);
-            l.add(4);
-            l.add(8);
-            l.add(9);
-        } else if (box == 8) {
-            l.add(2);
-            l.add(5);
-            l.add(7);
-            l.add(9);
-        } else if (box == 9) {
-            l.add(3);
-            l.add(6);
-            l.add(7);
-            l.add(8);
-        }
-        return l;
-    }
-
-    public int findUnique(List<Integer> rowNeeds, List<Integer> colNeeds, List<Integer> boxNeeds) {
-        List<Integer> lis = new ArrayList<>();
-        //System.out.print(lis);
-        System.out.println("\nRow needs: ");
-        System.out.print(rowNeeds);
-        System.out.println("\nColumn needs: ");
-        System.out.print(colNeeds);
-        System.out.println("\nBox needs: ");
-        System.out.print(boxNeeds);
-        System.out.println();
-        
-        if (rowNeeds.size() == 1) {
-            return rowNeeds.get(0);
-        } else if (colNeeds.size() == 1) {
-            return colNeeds.get(0);
-        } else if (boxNeeds.size() == 1) {
-            return boxNeeds.get(0);
-        }
-        
-        for (int i = 1; i <= 9; i++) {
-            if (rowNeeds.contains(i) && !colNeeds.contains(i) && !boxNeeds.contains(i)) {
-                lis.add(rowNeeds.get(rowNeeds.indexOf(i)));
-            } else if (!rowNeeds.contains(i) && colNeeds.contains(i) && !boxNeeds.contains(i)) {
-                lis.add(colNeeds.get(colNeeds.indexOf(i)));
-            } else if (!rowNeeds.contains(i) && !colNeeds.contains(i) && boxNeeds.contains(i)) {
-                lis.add(boxNeeds.get(boxNeeds.indexOf(i)));
-            }
-        }
-
-        if (lis.size() != 1) {
-            System.out.println("No uniques here");
-            System.out.print(lis);
-            System.out.println();
-            return -1;
-        }
-        System.out.println("Unique Element found:" + lis.get(0));
-        System.out.print(lis);
-        System.out.println();
-        return lis.get(0);
-    }
-
-    public boolean evaluate(int row, int col) {
-        boolean didSomething = false;
-
-        List<Integer> nonConflicting = new ArrayList<>();
-
-        List<Integer> rowNeeds = new ArrayList<>();
+    public boolean checkPhaseTwo(int row, int col) {
+        boolean worked = false;
         List<Integer> boxNeeds = new ArrayList<>();
         List<Integer> colNeeds = new ArrayList<>();
-
-        int groupRowOffset = (row / 3) * 3;
-        int groupColOffset = (col / 3) * 3;
+        List<Integer> rowNeeds = new ArrayList<>();
         
-        for (int i = 1; i <= 9; i++) {
-            if (!conflict(row, col, i)) {
-                nonConflicting.add(i);
+        //box
+        for (int i = 1; i < 10; i++) {
+            if (boxNeeds(i,row,col) && !conflict(row,col,i)) {
+                boxNeeds.add(i);
             }
         }
-
-        for (int i = 0; i < nonConflicting.size(); i++) {
-            if (!rowContains(row, nonConflicting.get(i))) {
-                rowNeeds.add(nonConflicting.get(i));
+        
+        //row
+        for (int i = 1; i < 10; i++) {
+            if (rowNeeds(i,row,col) && !conflict(row,col,i)) {
+                rowNeeds.add(i);
             }
         }
-
-        for (int i = 0; i < nonConflicting.size(); i++) {
-            if (!colContains(col, i)) {
-                colNeeds.add(nonConflicting.get(i));
+        
+        //column
+        for (int i = 1; i < 10; i++) {
+            if (colNeeds(i,row,col) && !conflict(row,col,i)) {
+                colNeeds.add(i);
             }
         }
-
-        for (int i = 0; i < nonConflicting.size(); i++) {
-            if (!boxContains(row, col, nonConflicting.get(i))) {
-                boxNeeds.add(nonConflicting.get(i));
-            }
+        
+        if (rowNeeds.size() == 1) {
+            board[row][col].set(rowNeeds.get(0));
+            worked = true;
+        } else if (colNeeds.size() == 1) {
+            board[row][col].set(colNeeds.get(0));
+            worked = true;
+        } else if (boxNeeds.size() == 1) {
+            board[row][col].set(boxNeeds.get(0));
+            worked = true;
         }
-
-        int ind = findUnique(rowNeeds, colNeeds, boxNeeds);
-        if (ind != -1) {
-            board[row][col].set(ind);
-            printBoard();
+        
+        return worked;
+    }
+    
+    public boolean evaluate(int row, int col) {
+        boolean didSomething = false;
+        
+        if (checkPhaseOne(row,col)) {
             didSomething = true;
+        } else if (!phaseTwo) {
+            didSomething  = checkPhaseTwo(row,col);
         }
-
+        
         return didSomething;
     }
 
@@ -253,6 +197,8 @@ public final class Sudoku {
         boolean loop1 = false;
         boolean loop2 = false;
         while (!infinite) {
+            computeCellsToSolve();
+            System.out.println("Cells to solve: "+cellsToSolve);
             for (int i = 0; i < 9; i++) {
                 for (int j = 0; j < 9; j++) {
                     if (board[i][j].getValue() == 0) {
@@ -278,6 +224,18 @@ public final class Sudoku {
         }
 
         return !infinite;
+    }
+    
+    public boolean solved() {
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j].getValue() == 0) {
+                    return false;
+                }
+            }
+        }
+        
+        return true;
     }
 
     public void printBoard() {

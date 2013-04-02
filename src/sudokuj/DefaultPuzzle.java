@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package puzzle;
+package sudokuj;
 
 import java.util.ArrayList;
 import sudokuj.Cell;
