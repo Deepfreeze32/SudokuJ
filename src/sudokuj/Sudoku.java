@@ -1,15 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sudokuj;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author Travis
+ * The base solver class.
+ * @author Deepfreeze32
  */
 public final class Sudoku {
 

@@ -1,15 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sudokuj;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
- * @author Travis
+ * The Cell class to describe a cell in a Sudoku puzzle.
+ * @author Deepfreeze32
  */
 public class Cell {
 

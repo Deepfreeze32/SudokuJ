@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sudokuj;
 
 /**
- *
- * @author Travis
+ * The main class.
+ * @author Deepfreeze32
  */
 public class SudokuJ {
     

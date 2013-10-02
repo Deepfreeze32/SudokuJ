@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sudokuj;
 
 /**
- *
- * @author tcc10a
+ * The parser to process input.
+ * @author Deepfreeze32
  */
 public class PuzzleParser {
     static boolean solved;

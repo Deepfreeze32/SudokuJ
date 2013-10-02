@@ -1,15 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package sudokuj;
 
 import java.util.ArrayList;
 import sudokuj.Cell;
 
 /**
- *
- * @author Travis
+ * The default puzzle to solve if no puzzles are passed.
+ * @author Deepfreeze32
  */
 public class DefaultPuzzle {
     private static Cell[][] board;
