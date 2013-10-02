@@ -19,5 +19,5 @@ java sudokuj.SudokuJ <parameters>
 
 Valid parameters are: A Sudoku puzzle in the specified format. No parameters will  
 run the simple example I provided. A puzzle must be input in the following form:  
-[row1][row2][row3][row4][row5][row6][row7][row8]
+[row1][row2][row3][row4][row5][row6][row7][row8]  
 Example: java sudoku.SudokuJ 009070064068015703300609080000000635080564020695000000912400306736190450850030200
